@@ -4,79 +4,97 @@
   <title>플타디 뽑기</title>
 </head>
 
-<body style="text-align:center; font-family:sans-serif; margin-top:60px;">
+<body style="margin:0; font-family:sans-serif;">
 
-  <h1>🎲 확률 뽑기</h1>
+<div style="display:flex; height:100vh;">
 
-  <p>뽑기 횟수 또는 재화 입력</p>
+  <!-- 왼쪽: 확률표 -->
+  <div style="width:30%; background:#111; color:white; padding:20px;">
+    <h2>📊 확률표</h2>
 
-  <!-- 직접 횟수 -->
-  <input id="count" type="number" min="1" value="10" style="font-size:16px;">
-  <p>또는 재화 입력 (100 = 1회)</p>
+    <p>일반 ⚪ - 40%</p>
+    <p>드문 🟢 - 25%</p>
+    <p>레어 🔵 - 15%</p>
+    <p>에픽 🟣 - 12%</p>
+    <p>전설 🟡 - 7%</p>
+    <p>신화 🔴🔥 - 1%</p>
+  </div>
 
-  <!-- 재화 입력 -->
-  <input id="money" type="number" min="0" value="0" style="font-size:16px;">
-  Iz
+  <!-- 오른쪽: 뽑기 -->
+  <div style="flex:1; text-align:center; margin-top:60px;">
 
-  <br><br>
+    <h1>🎲 확률 뽑기</h1>
 
-  <button onclick="draw()" style="padding:10px 20px; font-size:18px;">
-    뽑기
-  </button>
+    <p>뽑기 횟수</p>
+    <input id="count" type="number" min="1" value="10">
 
-  <h2>결과</h2>
-  <div id="result"></div>
+    <p>재화 입력 (100 = 1회)</p>
+    <input id="money" type="number" min="0" value="0">
+    Iz
 
-  <script>
-    function getItem() {
-      let rand = Math.random() * 100;
+    <br><br>
 
-      if (rand < 40) return "일반 ⚪";
-      else if (rand < 65) return "드문 🟢";
-      else if (rand < 80) return "레어 🔵";
-      else if (rand < 92) return "에픽 🟣";
-      else if (rand < 99) return "전설 🟡";
-      else return "신화 🔴🔥";
+    <button onclick="draw()" style="padding:10px 20px; font-size:18px;">
+      뽑기
+    </button>
+
+    <h2>결과</h2>
+    <div id="result"></div>
+
+  </div>
+
+</div>
+
+<script>
+  function getItem() {
+    let rand = Math.random() * 100;
+
+    if (rand < 40) return "일반 ⚪";
+    else if (rand < 65) return "드문 🟢";
+    else if (rand < 80) return "레어 🔵";
+    else if (rand < 92) return "에픽 🟣";
+    else if (rand < 99) return "전설 🟡";
+    else return "신화 🔴🔥";
+  }
+
+  function getDrawCount() {
+    let manual = parseInt(document.getElementById("count").value) || 0;
+    let money = parseInt(document.getElementById("money").value) || 0;
+
+    if (money > 0) {
+      return Math.floor(money / 100) + Math.floor(money / 1000);
+    } else {
+      return manual;
+    }
+  }
+
+  function draw() {
+    let count = getDrawCount();
+    let resultBox = document.getElementById("result");
+
+    let counts = {
+      "일반 ⚪": 0,
+      "드문 🟢": 0,
+      "레어 🔵": 0,
+      "에픽 🟣": 0,
+      "전설 🟡": 0,
+      "신화 🔴🔥": 0
+    };
+
+    for (let i = 0; i < count; i++) {
+      let item = getItem();
+      counts[item]++;
     }
 
-    function getDrawCount() {
-      let manual = parseInt(document.getElementById("count").value);
-      let money = parseInt(document.getElementById("money").value);
+    resultBox.innerHTML = "";
 
-      if (money > 0) {
-        return Math.ceil(money / 100);
-      } else {
-        return manual;
+    for (let key in counts) {
+      if (counts[key] > 0) {
+        resultBox.innerHTML += key + " - " + counts[key] + "<br>";
       }
     }
-
-    function draw() {
-      let count = getDrawCount();
-      let resultBox = document.getElementById("result");
-
-      let counts = {
-        "일반 ⚪": 0,
-        "드문 🟢": 0,
-        "레어 🔵": 0,
-        "에픽 🟣": 0,
-        "전설 🟡": 0,
-        "신화 🔴🔥": 0
-      };
-
-      for (let i = 0; i < count; i++) {
-        let item = getItem();
-        counts[item]++;
-      }
-
-      resultBox.innerHTML = "";
-
-      for (let key in counts) {
-        if (counts[key] > 0) {
-          resultBox.innerHTML += key + " - " + counts[key] + "<br>";
-        }
-      }
-    }
-  </script>
+  }
+</script>
 
 </body>
 </html>

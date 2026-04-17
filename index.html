@@ -1,22 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>hyeonuk14의 사이트</title>
+  <title>확률 뽑기</title>
 </head>
 
-<body style="background-color:#111; color:white; text-align:center; font-family:sans-serif;">
+<body style="text-align:center; font-family:sans-serif; margin-top:80px;">
 
-  <h1>👋 hyeonuk14</h1>
-  <p>내 첫 웹사이트에 온 걸 환영해</p>
+  <h1>🎲 확률 뽑기</h1>
 
-  <img src="https://via.placeholder.com/200" style="border-radius:20px;">
+  <p>몇 번 뽑을지 입력</p>
 
+  <input id="count" type="number" min="1" value="10" style="font-size:18px; width:80px;">
   <br><br>
 
-  <button onclick="alert('눌렀다! 😆')" 
-          style="padding:10px 20px; font-size:16px;">
-    눌러봐
+  <button onclick="draw()" style="padding:10px 20px; font-size:18px;">
+    뽑기
   </button>
+
+  <h2>결과</h2>
+  <div id="result"></div>
+
+  <script>
+    function getItem() {
+      let rand = Math.random() * 100;
+
+      if (rand < 40) return "일반 ⚪";
+      else if (rand < 65) return "드문 🟢";
+      else if (rand < 80) return "레어 🔵";
+      else if (rand < 92) return "에픽 🟣";
+      else if (rand < 99) return "전설 🟡";
+      else return "신화 🔴🔥";
+    }
+
+    function draw() {
+      let count = parseInt(document.getElementById("count").value);
+      let resultBox = document.getElementById("result");
+
+      let counts = {
+        "일반 ⚪": 0,
+        "드문 🟢": 0,
+        "레어 🔵": 0,
+        "에픽 🟣": 0,
+        "전설 🟡": 0,
+        "신화 🔴🔥": 0
+      };
+
+      // 뽑기
+      for (let i = 0; i < count; i++) {
+        let item = getItem();
+        counts[item]++;
+      }
+
+      // 출력 (0개 제외)
+      resultBox.innerHTML = "";
+
+      for (let key in counts) {
+        if (counts[key] > 0) {
+          resultBox.innerHTML += key + " - " + counts[key] + "<br>";
+        }
+      }
+    }
+  </script>
 
 </body>
 </html>

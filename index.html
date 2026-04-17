@@ -4,96 +4,120 @@
   <title>플타디 뽑기</title>
 </head>
 
-<body style="margin:0; font-family:sans-serif;">
+<body style="margin:0; font-family:sans-serif; background:#f2f2f2;">
 
-<div style="display:flex; height:100vh;">
+<div style="display:flex; justify-content:space-around; padding-top:30px;">
 
-  <!-- 왼쪽: 확률표 -->
-  <div style="width:30%; background:#111; color:white; padding:20px;">
-    <h2>📊 확률표</h2>
+  <!-- 🎮 일반 -->
+  <div style="text-align:center; width:250px;">
+    <h2>🎲 일반 뽑기</h2>
+    <p>100 Iz = 1회</p>
 
-    <p>일반 ⚪ - 40%</p>
-    <p>드문 🟢 - 25%</p>
-    <p>레어 🔵 - 15%</p>
-    <p>에픽 🟣 - 12%</p>
-    <p>전설 🟡 - 7%</p>
-    <p>신화 🔴🔥 - 1%</p>
-  </div>
-
-  <!-- 오른쪽: 뽑기 -->
-  <div style="flex:1; text-align:center; margin-top:60px;">
-
-    <h1>🎲 확률 뽑기</h1>
-
-    <p>뽑기 횟수</p>
     <input id="count" type="number" min="1" value="10">
+    <br><br>
 
-    <p>재화 입력 (100 = 1회)</p>
-    <input id="money" type="number" min="0" value="0">
+    <input id="moneyNormal" type="number" value="0">
     Iz
 
     <br><br>
 
-    <button onclick="draw()" style="padding:10px 20px; font-size:18px;">
-      뽑기
-    </button>
+    <button onclick="drawNormal()">일반 뽑기</button>
 
-    <h2>결과</h2>
-    <div id="result"></div>
+    <h3>결과</h3>
+    <div id="resultNormal"></div>
+  </div>
 
+  <!-- 💥 특수 -->
+  <div style="text-align:center; width:250px;">
+    <h2>💥 특수 뽑기</h2>
+    <p>1000 Iz = 1회 (10배)</p>
+
+    <input id="countSpecial" type="number" min="1" value="10">
+    <br><br>
+
+    <input id="moneySpecial" type="number" value="0">
+    Iz
+
+    <br><br>
+
+    <button onclick="drawSpecial()">특수 뽑기</button>
+
+    <h3>결과</h3>
+    <div id="resultSpecial"></div>
   </div>
 
 </div>
 
 <script>
-  function getItem() {
-    let rand = Math.random() * 100;
 
-    if (rand < 40) return "일반 ⚪";
-    else if (rand < 65) return "드문 🟢";
-    else if (rand < 80) return "레어 🔵";
-    else if (rand < 92) return "에픽 🟣";
-    else if (rand < 99) return "전설 🟡";
+  // ---------- 일반 ----------
+  function getNormal() {
+    let r = Math.random() * 100;
+
+    if (r < 40) return "일반 ⚪";
+    else if (r < 65) return "드문 🟢";
+    else if (r < 80) return "레어 🔵";
+    else if (r < 92) return "에픽 🟣";
+    else if (r < 99) return "전설 🟡";
     else return "신화 🔴🔥";
   }
 
-  function getDrawCount() {
-    let manual = parseInt(document.getElementById("count").value) || 0;
-    let money = parseInt(document.getElementById("money").value) || 0;
+  function drawNormal() {
+    let money = parseInt(document.getElementById("moneyNormal").value) || 0;
+    let count = Math.floor(money / 100);
 
-    if (money > 0) {
-      return Math.floor(money / 100) + Math.floor(money / 1000);
-    } else {
-      return manual;
-    }
-  }
+    let box = document.getElementById("resultNormal");
 
-  function draw() {
-    let count = getDrawCount();
-    let resultBox = document.getElementById("result");
-
-    let counts = {
-      "일반 ⚪": 0,
-      "드문 🟢": 0,
-      "레어 🔵": 0,
-      "에픽 🟣": 0,
-      "전설 🟡": 0,
-      "신화 🔴🔥": 0
+    let result = {
+      "일반 ⚪":0,"드문 🟢":0,"레어 🔵":0,
+      "에픽 🟣":0,"전설 🟡":0,"신화 🔴🔥":0
     };
 
     for (let i = 0; i < count; i++) {
-      let item = getItem();
-      counts[item]++;
+      result[getNormal()]++;
     }
 
-    resultBox.innerHTML = "";
-
-    for (let key in counts) {
-      if (counts[key] > 0) {
-        resultBox.innerHTML += key + " - " + counts[key] + "<br>";
-      }
+    box.innerHTML = "";
+    for (let k in result) {
+      if (result[k] > 0)
+        box.innerHTML += k + " - " + result[k] + "<br>";
     }
   }
+
+  // ---------- 특수 ----------
+  function getSpecial() {
+    let r = Math.random() * 100;
+
+    if (r < 27) return "일반 ⚪";
+    else if (r < 52) return "드문 🟢";
+    else if (r < 72) return "레어 🔵";
+    else if (r < 87) return "에픽 🟣";
+    else if (r < 97) return "전설 🟡";
+    else return "신화 🔴🔥";
+  }
+
+  function drawSpecial() {
+    let money = parseInt(document.getElementById("moneySpecial").value) || 0;
+    let count = Math.floor(money / 1000); // 🔥 10배 가격
+
+    let box = document.getElementById("resultSpecial");
+
+    let result = {
+      "일반 ⚪":0,"드문 🟢":0,"레어 🔵":0,
+      "에픽 🟣":0,"전설 🟡":0,"신화 🔴🔥":0
+    };
+
+    for (let i = 0; i < count; i++) {
+      result[getSpecial()]++;
+    }
+
+    box.innerHTML = "";
+    for (let k in result) {
+      if (result[k] > 0)
+        box.innerHTML += k + " - " + result[k] + "<br>";
+    }
+  }
+
 </script>
 
 </body>

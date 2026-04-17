@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>확률 뽑기</title>
+  <title>플타디 뽑기</title>
 </head>
 
-<body style="text-align:center; font-family:sans-serif; margin-top:80px;">
+<body style="text-align:center; font-family:sans-serif; margin-top:60px;">
 
   <h1>🎲 확률 뽑기</h1>
 
-  <p>몇 번 뽑을지 입력</p>
+  <p>뽑기 횟수 또는 재화 입력</p>
 
-  <input id="count" type="number" min="1" value="10" style="font-size:18px; width:80px;">
+  <!-- 직접 횟수 -->
+  <input id="count" type="number" min="1" value="10" style="font-size:16px;">
+  <p>또는 재화 입력 (100 = 1회)</p>
+
+  <!-- 재화 입력 -->
+  <input id="money" type="number" min="0" value="0" style="font-size:16px;">
+  Iz
+
   <br><br>
 
   <button onclick="draw()" style="padding:10px 20px; font-size:18px;">
@@ -32,8 +39,19 @@
       else return "신화 🔴🔥";
     }
 
+    function getDrawCount() {
+      let manual = parseInt(document.getElementById("count").value);
+      let money = parseInt(document.getElementById("money").value);
+
+      if (money > 0) {
+        return Math.ceil(money / 100);
+      } else {
+        return manual;
+      }
+    }
+
     function draw() {
-      let count = parseInt(document.getElementById("count").value);
+      let count = getDrawCount();
       let resultBox = document.getElementById("result");
 
       let counts = {
@@ -45,13 +63,11 @@
         "신화 🔴🔥": 0
       };
 
-      // 뽑기
       for (let i = 0; i < count; i++) {
         let item = getItem();
         counts[item]++;
       }
 
-      // 출력 (0개 제외)
       resultBox.innerHTML = "";
 
       for (let key in counts) {

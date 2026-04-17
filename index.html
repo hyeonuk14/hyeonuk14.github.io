@@ -1,20 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>플타디 뽑기</title>
+  <title>확률 뽑기</title>
 </head>
 
 <body style="margin:0; font-family:sans-serif; background:#f2f2f2;">
 
-<div style="display:flex; justify-content:space-around; padding-top:30px;">
+<div style="display:flex; gap:20px; padding:30px; align-items:flex-start;">
 
-  <!-- 🎮 일반 -->
-  <div style="text-align:center; width:250px;">
+  <!-- 📊 왼쪽: 확률표 2개 -->
+  <div style="display:flex; flex-direction:column; gap:15px; width:220px;">
+
+    <!-- 일반 -->
+    <div style="background:white; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <h3>📊 일반 뽑기</h3>
+      <p>일반 ⚪ - 40%</p>
+      <p>드문 🟢 - 25%</p>
+      <p>레어 🔵 - 15%</p>
+      <p>에픽 🟣 - 12%</p>
+      <p>전설 🟡 - 7%</p>
+      <p>신화 🔴🔥 - 1%</p>
+    </div>
+
+    <!-- 특수 -->
+    <div style="background:white; padding:15px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <h3>💥 특수 뽑기</h3>
+      <p>일반 ⚪ - 27%</p>
+      <p>드문 🟢 - 25%</p>
+      <p>레어 🔵 - 20%</p>
+      <p>에픽 🟣 - 15%</p>
+      <p>전설 🟡 - 10%</p>
+      <p>신화 🔴🔥 - 3%</p>
+    </div>
+
+  </div>
+
+  <!-- 🎮 가운데: 일반 -->
+  <div style="text-align:center; flex:1;">
     <h2>🎲 일반 뽑기</h2>
     <p>100 Iz = 1회</p>
-
-    <input id="count" type="number" min="1" value="10">
-    <br><br>
 
     <input id="moneyNormal" type="number" value="0">
     Iz
@@ -27,13 +51,10 @@
     <div id="resultNormal"></div>
   </div>
 
-  <!-- 💥 특수 -->
-  <div style="text-align:center; width:250px;">
+  <!-- 💥 오른쪽: 특수 -->
+  <div style="text-align:center; flex:1;">
     <h2>💥 특수 뽑기</h2>
-    <p>1000 Iz = 1회 (10배)</p>
-
-    <input id="countSpecial" type="number" min="1" value="10">
-    <br><br>
+    <p>1000 Iz = 1회</p>
 
     <input id="moneySpecial" type="number" value="0">
     Iz
@@ -98,7 +119,7 @@
 
   function drawSpecial() {
     let money = parseInt(document.getElementById("moneySpecial").value) || 0;
-    let count = Math.floor(money / 1000); // 🔥 10배 가격
+    let count = Math.floor(money / 1000);
 
     let box = document.getElementById("resultSpecial");
 

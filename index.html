@@ -1,15 +1,91 @@
-<button onclick="checkServer()">서버 상태 확인</button>
-<p id="status"></p>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>마인크래프트 서버 상태</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+
+  #status {
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  #sub {
+    font-size: 20px;
+    margin-top: 10px;
+    color: #cbd5f5;
+  }
+</style>
+</head>
+
+<body>
+
+<div>
+  <div id="status">확인 중...</div>
+  <div id="sub"></div>
+</div>
 
 <script>
 async function checkServer() {
-  const res = await fetch('https://api.mcsrvstat.us/2/hyeonuk4.feathermc.gg');
-  const data = await res.json();
+  try {
+    // 1차 API
+    const res1 = await fetch('https://api.mcsrvstat.us/2/hyeonuk4.feathermc.gg');
+    const data1 = await res1.json();
 
-  const text = data.online
-    ? `열림 ✅ (${data.players.online}/${data.players.max})`
-    : '닫힘 ❌';
+    // 2차 API (백업)
+    const res2 = await fetch('https://api.mcstatus.io/v2/status/java/hyeonuk4.feathermc.gg');
+    const data2 = await res2.json();
 
-  document.getElementById('status').innerText = text;
+    const online = data1.online || data2.online;
+
+    if (online) {
+      const players =
+        data1.players?.online ??
+        data2.players?.online ??
+        '?';
+
+      const max =
+        data1.players?.max ??
+        data2.players?.max ??
+        '?';
+
+      const version =
+        data1.version ??
+        data2.version?.name_clean ??
+        '알 수 없음';
+
+      document.getElementById('status').innerText = '🟢 서버 열림';
+      document.getElementById('sub').innerText =
+        `플레이어: ${players}/${max} | 버전: ${version}`;
+    } else {
+      document.getElementById('status').innerText = '🔴 서버 닫힘';
+      document.getElementById('sub').innerText = '';
+    }
+
+  } catch (e) {
+    document.getElementById('status').innerText = '⚠️ 확인 실패';
+    document.getElementById('sub').innerText = '';
+  }
 }
+
+// 처음 실행
+checkServer();
+
+// 5초마다 반복
+setInterval(checkServer, 5000);
 </script>
+
+</body>
+</html>
